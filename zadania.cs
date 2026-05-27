@@ -33,7 +33,7 @@ public class HelloWorld
         }
     }
     
-        static double zadanie2()
+    static double zadanie2()
     {
         Console.WriteLine("Wybierz jednostkę z której chcesz przeliczać (F/C): ");
         string skala = Console.ReadLine(); 
@@ -51,6 +51,28 @@ public class HelloWorld
         }
     }
     
+    static double zadanie3()
+    {
+        Console.WriteLine("Podaj ilość ocen ucznia: ");
+        int ilosc = int.Parse(Console.ReadLine());
+        int suma = 0;
+        for(int i=0;i<ilosc;i++){
+            Console.WriteLine("Podaj ocene od 1 do 6: ");
+            int ocena = int.Parse(Console.ReadLine());
+            suma += ocena;
+        }
+        double srednia = (double)suma/ilosc;
+            
+        if(srednia >= 3.0){
+            Console.WriteLine("Uczeń zdał"); 
+            return(srednia);
+        }
+        else{
+            Console.WriteLine("Uczeń nie zdał"); 
+            return(srednia);
+        }
+    }
+    
     public static void Main(string[] args)
     {
         Console.WriteLine("Podaj zadanie które chcesz wybrać: ");
@@ -62,6 +84,9 @@ public class HelloWorld
                 break;
             case 2:
                 Console.WriteLine(zadanie2());
+                break;
+            case 3:
+                Console.WriteLine(zadanie3());
                 break;
             default:
                 Console.WriteLine("Nie ma takiej opcji");
