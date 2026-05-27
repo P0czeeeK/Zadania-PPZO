@@ -31,6 +31,22 @@ def zadanie2():
     else:
          print("Nie ma takiej opcji")
          return
+    
+def zadanie3():
+    liczba_ocen = int(input("Podaj liczbę ocen ucznia: "))
+    suma = 0
+    for i in range(liczba_ocen):
+        ocena = int(input("Podaj ocenie od 1 do 6: "))
+        suma += ocena
+    srednia = float(suma/liczba_ocen)
+    print(srednia)
+    if(srednia >= 3.0):
+        print("Uczeń zdał")
+        return
+    else:
+        print("Uczeń nie zdał")
+        return
+    
 
 
 x = int(input("Które zadanie chcesz wybrać: "))
@@ -40,6 +56,8 @@ def wybor_zadania(x):
             return zadanie1()
         case 2:
             return zadanie2()
+        case 3:
+            return zadanie3()
         case _:
             print("Nie ma takiego zadania")
             return
