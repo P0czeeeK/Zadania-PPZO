@@ -97,8 +97,12 @@ class Field:
             print("Field is already planted")
             return
         
-        self.crop = crop
-        crop.planting(weather)
+        if weather.getMonth() in crop.planting_time:
+            crop.planting(weather)
+            self.crop = crop
+            
+        else:
+            print(f"Wrong month for planting")
 
     def harvestCrop(self, weather):
         if not self.crop:
@@ -154,10 +158,14 @@ class Animal:
     def __init__(self, animal_name):
         self.animal_name = animal_name
         self.is_hungry = False
-        self.since_last_meal = 0
 
-    def feed(self):
-        self.is_hungry = False
+    def feed(self, barn):
+        if(barn.silo > 0):
+            barn.silo -= 1
+            self.is_hungry = False
+            print(f"You feeded your {self.animal_name}")
+        else:
+            print("No food in silo")
 
     
 
@@ -172,6 +180,7 @@ class Farm:
     def nextDay(self):
         print("----------------------New Day----------------------")
         self.weather.sleep()
+        
         self.animal.is_hungry = True
 
         for field in self.fields:
@@ -232,8 +241,7 @@ def gameMenu(farm):
 
         elif(choice == 3):
             if(farm.animal.is_hungry == True):
-                farm.animal.feed()
-                print(f"You feed your {farm.animal.animal_name}")
+                farm.animal.feed(farm.barn)
             elif(farm.animal.is_hungry == False):
                 print(f"Your {farm.animal.animal_name} are not hungry")
 
@@ -271,23 +279,9 @@ def showFarmStatus(farm):
         print(f"Your {farm.animal.animal_name} is feeded")
 
 
-
-# farm.nextDay()
-# farm.nextDay()
-
-# farm.plant(1, wheat)
-
-# for i in range(5):
-#     farm.nextDay()
-
-# farm.harvest(1)
-
-# farm.barn.sell()
-
-
-# name = input("Write your name: ")
-# farm_name = input("Write your farm name: ")
+name = input("Write your name: ")
+farm_name = input("Write your farm name: ")
 
 farm = Farm()
-# print(f"\nWelcome {name} on your farm {farm_name}")
+print(f"\nWelcome {name} on your farm {farm_name}")
 gameMenu(farm)
