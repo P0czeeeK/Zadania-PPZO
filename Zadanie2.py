@@ -48,6 +48,9 @@ class Crop:
             else:
                 self.growth += 1
 
+    def isOcuppied(self):
+        return self.is_occupied
+
 
 
 class Barn:
@@ -176,18 +179,96 @@ class Farm:
         amount = field.harvestCrop(self.weather)
         self.barn.addToSilo(amount)
 
+    def whatFieldsDoIHave(self):
+        for i in range(len(self.fields)):
+            print(f"Field {i+1}")
+
+
+
+
+def gameMenu(farm):
+    while True:
+        print("\n--------------------------- FARM MENU ---------------------------")
+        print("1. Plant crop")
+        print("2. Harvest crop")
+        # print("3. Feed animals")
+        # print("4. Collect animal products")
+        print("5. Show farm status")
+        print("6. Sleep (next day)")
+        print("0. Exit")
+
+        choice = int(input("What you want to do? "))
+        if(choice == 1):
+            print("Which field do you want do plant?")
+            farm.whatFieldsDoIHave()
+            field_number = int(input())
+            crop_name = input("Which crop you want to plant? (Wheat/Oak/Corn): ")
+
+            if(crop_name == "Wheat"):
+                crop = Crop("Wheat", ["June", "July", "August"], ["September", "October"])
+            elif(crop_name == "Oak"):
+                crop = Crop("Oak", ["July", "August"], ["March", "April"])
+            elif(crop_name == "Corn"):
+                crop = Crop("Corn", ["October", "November"], ["April", "May"])
+            else:
+                print("Uknown crop")
+                continue
+
+            farm.plant(field_number, crop)
+
+        elif(choice == 2):
+            print("Which field do you want do harvest?")
+            farm.whatFieldsDoIHave()
+            field_number = int(input())
+            farm.harvest(field_number)
+
+        elif(choice == 5):
+            showFarmStatus(farm)
+        
+        elif(choice == 6):
+            farm.nextDay()
+
+        elif(choice == 0):
+            print("Thanks for playing!")
+            break
+
+        else:
+            print("Invalid option")
+
+def showFarmStatus(farm):
+    print("\n--------------------------- FARM STATUS ---------------------------")
+    print(f"Month: {farm.weather.getMonth()}")
+    print(f"Weather: {farm.weather.getWeather()}")
+    print(f"Silo: {farm.barn.silo}")
+    print(f"Money: {farm.barn.money}")
+
+    print("\nFields:")
+    for field in farm.fields:
+        if field.crop and field.crop.isOcuppied():
+            print(f" Field {field.field_number}: {field.crop.plant_name}, growth {field.crop.growth}/10")
+        else:
+            print(f" Field {field.field_number}: empty")
+
+
+
+
+
+# farm.nextDay()
+# farm.nextDay()
+
+# farm.plant(1, wheat)
+
+# for i in range(5):
+#     farm.nextDay()
+
+# farm.harvest(1)
+
+# farm.barn.sell()
+
+
+# name = input("Write your name: ")
+# farm_name = input("Write your farm name: ")
 
 farm = Farm()
-
-farm.nextDay()
-farm.nextDay()
-
-wheat = Crop("Wheat", ["August", "September"], ["March", "April"])
-
-farm.plant(1, wheat)
-
-for i in range(5):
-    farm.nextDay()
-
-farm.harvest(1)
-farm.barn.sell()
+# print(f"\nWelcome {name} on your farm {farm_name}")
+gameMenu(farm)
