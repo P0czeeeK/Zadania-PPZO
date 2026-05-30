@@ -5,27 +5,39 @@ import random
 
 class Crop:
 #Stan wzrotu, nazwa, pora zbiorów, numer pola, zbiory, sadzenie
-    def __init__(self, plant_name):
-        self.plant_name = plant_name,
-        self.harvest_time = [],
-        self.planting_time = [],
-        self.is_occupied = False,
-        self.weather = Weather(),
-        self.barn = Barn()
+    def __init__(self, plant_name, harvest_time, planting_time):
+        self.plant_name = plant_name
+        self.harvest_time = harvest_time
+        self.planting_time = planting_time
+        self.is_occupied = False
+        self.growth = 0
 
-    def harvest(self, field_number, is_harvest_time, is_weather, silo_number, is_occupied):
+    def harvest(self, weather):
         #Sprawdzenie czy pora roku i pogoda pozwala na zebranie i zbiory
-        if(self.weather.getMonth in self.harvest_time):
-            pass
-        else:
-            print(f"You can't harvest in {self.weather.getSeason}")
+        if not self.is_occupied:
+            print("On the field is nothing grow")
+            return 0
+        
+        if weather.getMonth() not in self.harvest_time:
+            print(f"You can't harvest {self.plant_name} in {weather.getSeason()}")
+            return 0
+        
+        if self.growth < 10:
+            print(f"{self.plant_name} is not ready yet")
+            return 0
+        
+        print(f"Harvested {self.plant_name}!")
+        self.is_occupied = False
+        return 10
 
-    def planting(self, field_number, is_harvest_time, is_weather, is_occupied):
+    def planting(self, weather):
         #Sprawdzenie czy na polu coś rośnie i czy jest pora roku i pogoda na zasadzenie
-        if(self.weather.getMonth in self.planting_time):
-            pass
+        if(weather.getMonth() in self.planting_time):
+            self.is_occupied = True
+            self.growth = 0
+            print(f"You plant {self.plant_name}")
         else:
-            print(f"You can't plant in {self.weather.getSeason}")
+            print(f"You can't plant {self.plant_name} in {weather.getSeason()}")
 
 class Animal:
 #Rodzaj, pokarm, zbiory
@@ -36,16 +48,22 @@ class Barn:
 #Zapasy, magazyn, sprzedaż, kasa
     def __init__(self):
         self.field = Field()
+        self.crop = Crop()
         self.field_list = []
-        self.money = 50000
+        self.crop_list = ["Wheat", "Oat", "Corn"]
+        self.money = 0
+        self.silo = 0
 
     def whatFieldIHave(self):
         print("Fields that you have: ")
         for i in self.field_list:
             print(self.field_list[i], ", ")
 
-    def HowMuchMoneyYouHave(self):
+    def howMuchMoneyYouHave(self):
         return self.money
+    
+    def harvestToSilo(self):
+        
 
 class Field:
     #Numer pola, czy jest nasze, ile m3 zbiorów
@@ -66,10 +84,10 @@ class Field:
 class Weather:
 #Dzień, miesiąc, pora roku, pogoda
     def __init__(self, month, season):
-        self.month = month,
-        self.season = season,
+        self.month = month
+        self.season = season
         self.what_weather = "sunny"
-        self.month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        self.month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         self.current_month = 0
 
     def weather_change(self):
@@ -77,6 +95,7 @@ class Weather:
 
     def sleep(self):
         self.current_month = (self.current_month + 1) % 12
+        self.what_weather = random.choice(["sunny", "rainy", "windy", "stormy"])
     
     def getMonth(self):
         return self.month_list[self.current_month]
@@ -101,4 +120,5 @@ class Weather:
     
 
 class Farm:
+    #Śpij dzień zmiana miesiąca i pogody, śpij 6h zmiana pogody, zboża
     pass
