@@ -149,21 +149,30 @@ class Weather:
         if month in autumn:
             return "Autumn"
     
-# class Animal:
-# #Rodzaj, pokarm, zbiory
-#     def __init__(self, animal_name, what_eating, is_hungry):
-#         pass    
+class Animal:
+#Rodzaj, pokarm, zbiory
+    def __init__(self, animal_name):
+        self.animal_name = animal_name
+        self.is_hungry = False
+        self.since_last_meal = 0
+
+    def feed(self):
+        self.is_hungry = False
+
+    
 
 class Farm:
     #Śpij dzień zmiana miesiąca i pogody, śpij 6h zmiana pogody, zboża
     def __init__(self):
         self.weather = Weather()
         self.barn = Barn()
+        self.animal = Animal("Cows")
         self.fields = [Field(1), Field(2)]
 
     def nextDay(self):
         print("----------------------New Day----------------------")
         self.weather.sleep()
+        self.animal.is_hungry = True
 
         for field in self.fields:
             field.update(self.weather)
@@ -191,10 +200,9 @@ def gameMenu(farm):
         print("\n--------------------------- FARM MENU ---------------------------")
         print("1. Plant crop")
         print("2. Harvest crop")
-        # print("3. Feed animals")
-        # print("4. Collect animal products")
-        print("5. Show farm status")
-        print("6. Sleep (next day)")
+        print("3. Feed animals")
+        print("4. Show farm status")
+        print("5. Sleep (next day)")
         print("0. Exit")
 
         choice = int(input("What you want to do? "))
@@ -222,10 +230,17 @@ def gameMenu(farm):
             field_number = int(input())
             farm.harvest(field_number)
 
-        elif(choice == 5):
+        elif(choice == 3):
+            if(farm.animal.is_hungry == True):
+                farm.animal.feed()
+                print(f"You feed your {farm.animal.animal_name}")
+            elif(farm.animal.is_hungry == False):
+                print(f"Your {farm.animal.animal_name} are not hungry")
+
+        elif(choice == 4):
             showFarmStatus(farm)
         
-        elif(choice == 6):
+        elif(choice == 5):
             farm.nextDay()
 
         elif(choice == 0):
@@ -249,7 +264,11 @@ def showFarmStatus(farm):
         else:
             print(f" Field {field.field_number}: empty")
 
-
+    print("\nAnimals:")
+    if(farm.animal.is_hungry == True):
+        print(f"Your {farm.animal.animal_name} are hungry")
+    elif(farm.animal.is_hungry == False):
+        print(f"Your {farm.animal.animal_name} is feeded")
 
 
 
